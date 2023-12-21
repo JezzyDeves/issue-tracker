@@ -12,30 +12,21 @@ datasource db {
 
 model Priority {
   id          Int           @id @default(autoincrement())
-  name        String
+  name        String        @unique
   trackerItem TrackerItem[]
 }
 
 model Tag {
-  id                 String               @id @unique @default(uuid())
-  name               String
-  TagsOnTrackerItems TagsOnTrackerItems[]
+  id           String        @id @default(uuid())
+  name         String        @unique
+  trackerItems TrackerItem[]
 }
 
 model TrackerItem {
-  id                 String               @id @unique @default(uuid())
-  title              String
-  description        String
-  priority           Priority             @relation(fields: [priorityId], references: [id])
-  priorityId         Int
-  TagsOnTrackerItems TagsOnTrackerItems[]
-}
-
-model TagsOnTrackerItems {
-  trackerItem   TrackerItem @relation(fields: [trackerItemId], references: [id])
-  tag           Tag         @relation(fields: [tagId], references: [id])
-  trackerItemId String
-  tagId         String
-
-  @@id([trackerItemId, tagId])
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  priority    Priority @relation(fields: [priorityId], references: [id])
+  priorityId  Int
+  tags        Tag[]
 }
