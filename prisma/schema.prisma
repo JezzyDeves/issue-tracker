@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Priority {
+  id          Int           @id @default(autoincrement())
+  name        String
+  trackerItem TrackerItem[]
+}
+
+model Tag {
+  id                 String               @id @unique @default(uuid())
+  name               String
+  TagsOnTrackerItems TagsOnTrackerItems[]
+}
+
+model TrackerItem {
+  id                 String               @id @unique @default(uuid())
+  title              String
+  description        String
+  priority           Priority             @relation(fields: [priorityId], references: [id])
+  priorityId         Int
+  TagsOnTrackerItems TagsOnTrackerItems[]
+}
+
+model TagsOnTrackerItems {
+  trackerItem   TrackerItem @relation(fields: [trackerItemId], references: [id])
+  tag           Tag         @relation(fields: [tagId], references: [id])
+  trackerItemId String
+  tagId         String
+
+  @@id([trackerItemId, tagId])
+}
