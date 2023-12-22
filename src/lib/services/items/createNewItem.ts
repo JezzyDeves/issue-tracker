@@ -1,10 +1,11 @@
+import type Priority from '$lib/enums/Priority';
 import prismaClient from '$lib/prisma';
 
 export type CreateItemContract = {
 	title: string;
 	description: string;
 	tagNames: string[];
-	priority: string;
+	priority: Priority;
 };
 
 export default async function createNewItem(contract: CreateItemContract) {
@@ -12,16 +13,7 @@ export default async function createNewItem(contract: CreateItemContract) {
 		data: {
 			description: contract.description,
 			title: contract.title,
-			priority: {
-				connectOrCreate: {
-					where: {
-						name: contract.priority
-					},
-					create: {
-						name: contract.priority
-					}
-				}
-			},
+			priorityId: contract.priority,
 			tags: {
 				connectOrCreate: contract.tagNames.map((tagName) => {
 					return {

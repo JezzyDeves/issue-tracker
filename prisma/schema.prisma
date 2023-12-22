@@ -10,12 +10,6 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model Priority {
-  id          Int           @id @default(autoincrement())
-  name        String        @unique
-  trackerItem TrackerItem[]
-}
-
 model Tag {
   id           String        @id @default(uuid())
   name         String        @unique
@@ -23,10 +17,9 @@ model Tag {
 }
 
 model TrackerItem {
-  id          String   @id @default(uuid())
+  id          String @id @default(uuid())
   title       String
   description String
-  priority    Priority @relation(fields: [priorityId], references: [id])
   priorityId  Int
   tags        Tag[]
 }
